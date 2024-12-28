@@ -1,6 +1,8 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
+import { ObjectId } from "mongoose";
 
 interface IUser extends Document {
+  _id: ObjectId | string;
   name: string;
   email: string;
   password: string;
