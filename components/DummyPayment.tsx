@@ -3,7 +3,13 @@
 import { useState } from 'react';
 
 interface DummyPaymentProps {
-  onSuccess: (paymentDetails: any) => void;
+  onSuccess: (paymentDetails: PaymentDetails) => void;
+}
+
+interface PaymentDetails {
+  paymentId: string;
+  amount: number;
+  status: string;
 }
 
 export default function DummyPayment({ onSuccess }: DummyPaymentProps) {
@@ -19,7 +25,7 @@ export default function DummyPayment({ onSuccess }: DummyPaymentProps) {
     // Simulate payment process
     setTimeout(() => {
       setIsLoading(false);
-      const paymentDetails = {
+      const paymentDetails: PaymentDetails = {
         paymentId: 'DUMMY_' + Math.random().toString(36).substr(2, 9),
         amount: 1000, // You might want to pass the actual amount from the parent component
         status: 'success'
@@ -89,4 +95,3 @@ export default function DummyPayment({ onSuccess }: DummyPaymentProps) {
     </div>
   );
 }
-

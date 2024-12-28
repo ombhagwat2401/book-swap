@@ -1,9 +1,19 @@
 import { NextResponse } from 'next/server';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
-import  dbConnect  from '@/lib/dbConnect';
+import dbConnect from '@/lib/dbConnect';
 import Order from '@/model/Order';
 import Book from '@/model/Book';
+
+// Define a type for the order item
+interface OrderItem {
+  bookId: {
+    _id: string;
+    price: number;
+    user: string;
+  };
+  quantity: number;
+}
 
 export async function POST(req: Request) {
   try {
@@ -18,8 +28,9 @@ export async function POST(req: Request) {
 
     const newOrder = new Order({
       user: session.user.id,
-      items: await Promise.all(orderData.items.map(async (item: any) => {
+      items: await Promise.all(orderData.items.map(async (item: OrderItem) => {
         const book = await Book.findById(item.bookId._id);
+        console.log(book);
         return {
           book: item.bookId._id,
           quantity: item.quantity,
@@ -44,11 +55,11 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     await dbConnect();
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

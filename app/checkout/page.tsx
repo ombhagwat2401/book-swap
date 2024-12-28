@@ -6,12 +6,28 @@ import BottomNavigation from '@/components/BottomNavigation';
 import { useSession } from 'next-auth/react';
 import DummyPayment from '@/components/DummyPayment';
 
+// Define interfaces for the payment details and cart item structure
+interface PaymentDetails {
+  paymentId: string;
+  amount: number;
+  status: string;
+}
+
+interface CartItem {
+  bookId: {
+    price: number;
+  };
+  quantity: number;
+}
+
 export default function Checkout() {
     const [mobileNumber, setMobileNumber] = useState('');
     const [address, setAddress] = useState('');
     const [showPayment, setShowPayment] = useState(false);
     const router = useRouter();
     const { data: session, status } = useSession();
+
+    console.log(session)
 
     const handleNext = async () => {
         if (!mobileNumber || !address) {
@@ -21,14 +37,14 @@ export default function Checkout() {
         setShowPayment(true);
     };
 
-    const handlePaymentSuccess = async (paymentDetails: any) => {
+    const handlePaymentSuccess = async (paymentDetails: PaymentDetails) => {
         try {
             // Fetch cart items
             const cartResponse = await fetch('/api/cart');
-            const cartItems = await cartResponse.json();
+            const cartItems: CartItem[] = await cartResponse.json();
             
             // Calculate total
-            const total = cartItems.reduce((sum: number, item: any) => sum + (item.bookId.price * item.quantity), 0);
+            const total = cartItems.reduce((sum: number, item: CartItem) => sum + (item.bookId.price * item.quantity), 0);
 
             // Save order to database
             const saveOrderResponse = await fetch('/api/orders', {
@@ -126,4 +142,3 @@ export default function Checkout() {
         </>
     );
 }
-

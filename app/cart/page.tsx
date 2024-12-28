@@ -71,7 +71,7 @@ export default function Cart() {
         <div className="grid grid-cols-1 gap-4">
           {cartItems.map((item) => (
 
-            <Link href={`/book-details?id=${item.bookId._id}`}>  
+            <Link href={`/book-details?id=${item.bookId._id}`} key={item.bookId._id}>  
                      <div
               key={item._id}
               className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex"

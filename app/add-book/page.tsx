@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import { useRouter } from 'next/navigation';
 
 // Define the TypeScript type for the form data
@@ -26,6 +25,7 @@ const uploadImage = async (file: File): Promise<string> => {
     const response = await axios.post('https://api.cloudinary.com/v1_1/dae4fjmsn/image/upload/', formData);
     return response.data.url; // Return the image URL
   } catch (error) {
+    console.log(error)
     throw new Error('Image upload failed');
   }
 };

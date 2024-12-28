@@ -29,6 +29,8 @@ export async function POST(req: Request) {
       mob,
     });
 
+    console.log(user)
+
     return NextResponse.json(
       { message: 'User created successfully' },
       { status: 201 }
